@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Glow Beauty Salon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h1>Glow Beauty Salon</h1>
+    <ul>
+      <li><a href="indexx.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <div class="form-container">
+      <h2>Book Appointment</h2>
+
+      <form id="bookingForm">
+        <select required>
+            <option>Select Service</option>
+            <option>Hairstyle</option>
+            <option>Makeup</option>
+            <option>Manicure</option>
+            <option>Facial</option>
+        </select>
+
+        <input type="date" required>
+        <input type="time" required>
+
+        <button type="submit">Book Now</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("bookingForm")
+    .addEventListener("submit", function(e){
+        e.preventDefault();
+        alert("Appointment Booked Successfully!");
+    });
+  </script>
+
+</body>
+</html>
