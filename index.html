@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glamour Beauty Salon - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .active-nav { background-color: #ec4899; color: white; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside class="w-64 bg-slate-900 text-gray-300 flex flex-col justify-between hidden md:flex">
+            <div>
+                <div class="p-5 flex items-center gap-3 border-b border-slate-800">
+                    <div class="bg-pink-500 p-2 rounded-lg text-white">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-white tracking-wide text-lg">Glamour</h1>
+                        <p class="text-xs text-pink-400 font-semibold uppercase tracking-wider">Admin Side</p>
+                    </div>
+                </div>
+
+                <nav class="p-4 space-y-1">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="active-nav w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800">
+                        <i class="fa-solid fa-chart-pie w-5"></i> Dashboard Overview
+                    </button>
+                    <button onclick="switchTab('services')" id="nav-services" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-scissors w-5"></i> Manage Services
+                    </button>
+                    <button onclick="switchTab('staff')" id="nav-staff" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-user-tie w-5"></i> Manage Staff
+                    </button>
+                    <button onclick="switchTab('bookings')" id="nav-bookings" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-calendar-check w-5"></i> Manage Bookings
+                    </button>
+                    <button onclick="switchTab('customers')" id="nav-customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-users w-5"></i> Manage Customers
+                    </button>
+                    <button onclick="switchTab('reviews')" id="nav-reviews" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-star w-5"></i> Reviews
+                    </button>
+                    <button onclick="switchTab('reports')" id="nav-reports" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-chart-line w-5"></i> Reports & Analytics
+                    </button>
+                    <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-gear w-5"></i> Settings
+                    </button>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="alert('Logging out...')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-red-950/30 transition-all">
+                    <i class="fa-solid fa-right-from-bracket w-5"></i> Log Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            
+            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <h2 id="page-title" class="text-xl font-bold text-gray-800">Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative p-2 text-gray-500 hover:text-pink-500 transition-colors">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
+                    </button>
+                    <div class="flex items-center gap-3 border-l pl-4 border-gray-200">
+                        <div class="text-right">
+                            <p class="text-sm font-semibold text-gray-800">Admin</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold border border-pink-200">
+                            A
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="p-6 space-y-6">
+
+                <div id="view-dashboard" class="space-y-6 tab-content">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Bookings</p>
+                                <h3 id="stat-total-bookings" class="text-2xl font-bold text-gray-800 mt-1">156</h3>
+                                <p class="text-xs text-green-500 font-medium mt-2"><i class="fa-solid fa-arrow-trend-up"></i> 12.3% <span class="text-gray-400 font-normal">from last month</span></p>
+                            </div>
+                            <div class="bg-pink-50 text-pink-500 p-3 rounded-xl"><i class="fa-solid fa-calendar-days text-xl"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Today's Bookings</p>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1">5</h3>
+                                <p class="text-xs text-purple-500 font-medium mt-2"><i class="fa-solid fa-arrow-trend-up"></i> 8.3% <span class="text-gray-400 font-normal">from yesterday</span></p>
+                            </div>
+                            <div class="bg-purple-50 text-purple-500 p-3 rounded-xl"><i class="fa-solid fa-clock text-xl"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Customers</p>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1">10</h3>
+                                <p class="text-xs text-orange-500 font-medium mt-2"><i class="fa-solid fa-arrow-trend-up"></i> 4.7% <span class="text-gray-400 font-normal">from last month</span></p>
+                            </div>
+                            <div class="bg-orange-50 text-orange-500 p-3 rounded-xl"><i class="fa-solid fa-users text-xl"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</p>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1">₹120000</h3>
+                                <p class="text-xs text-blue-500 font-medium mt-2"><i class="fa-solid fa-arrow-trend-up"></i> 15.2% <span class="text-gray-400 font-normal">from last month</span></p>
+                            </div>
+                            <div class="bg-blue-50 text-blue-500 p-3 rounded-xl"><i class="fa-solid fa-wallet text-xl"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <div class="lg:col-span-2 space-y-6">
+                            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="font-bold text-gray-800 text-base">Bookings Overview</h4>
+                                    <select class="text-xs bg-gray-50 border border-gray-200 rounded-lg p-1.5 font-medium text-gray-600 focus:outline-pink-400">
+                                        <option>This Week</option>
+                                        <option>This Month</option>
+                                    </select>
+                                </div>
+                                <div class="h-64">
+                                    <canvas id="bookingsOverviewChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                                    <h4 class="font-bold text-gray-800 text-base mb-4">Bookings by Service</h4>
+                                    <div class="h-56 flex justify-center items-center">
+                                        <canvas id="servicePieChart"></canvas>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-center mb-4">
+                                            <h4 class="font-bold text-gray-800 text-base">Recent Bookings</h4>
+                                            <button onclick="switchTab('bookings')" class="text-xs text-pink-500 font-semibold hover:underline">View All</button>
+                                        </div>
+                                        <div class="space-y-3" id="recent-bookings-list">
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm h-fit">
+                            <h4 class="font-bold text-gray-800 text-base mb-4">Add New Service</h4>
+                            <form id="addServiceForm" class="space-y-4" onsubmit="handleServiceSubmit(event)">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Service Name</label>
+                                    <input required type="text" id="svc-name" placeholder="Enter service name" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-pink-400">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Category</label>
+                                    <select id="svc-cat" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-pink-400 bg-white">
+                                        <option>Haircut & Styling</option>
+                                        <option>Makeup</option>
+                                        <option>Facial</option>
+                                        <option>Manicure</option>
+                                        <option>Hair Coloring</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 mb-1">Price (₹)</label>
+                                        <input required type="number" id="svc-price" value="0.00" step="0.01" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-pink-400">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 mb-1">Duration</label>
+                                        <select id="svc-dur" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-pink-400 bg-white">
+                                            <option>30 min</option>
+                                            <option>1 hour</option>
+                                            <option>1.5 hours</option>
+                                            <option>2 hours</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Description</label>
+                                    <textarea id="svc-desc" rows="3" placeholder="Enter description" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-pink-400"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium text-sm py-2.5 rounded-lg transition-colors shadow-sm shadow-pink-200">
+                                    Add Service
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="view-generic" class="hidden tab-content bg-white p-8 rounded-xl border border-gray-100 text-center py-20">
+                    <div class="w-16 h-16 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        <i id="generic-icon" class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <h3 id="generic-title" class="text-xl font-bold text-gray-800">Section Content</h3>
+                    <p class="text-gray-400 max-w-sm mx-auto text-sm mt-1">This functional sub-module dashboard window acts as a gateway placeholder interface for advanced business logic operations.</p>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Memory/State Layer Simulation
+        let bookingData = [
+            { id: 1, name: "Tinashe", service: "Haircut & Styling", date: "May 20, 2026 - 11:00 AM", status: "Upcoming", imgColor: "bg-purple-500" },
+            { id: 2, name: "Lizzy ", service: "Facial", date: "May 20, 2026 - 01:00 PM", status: "Upcoming", imgColor: "bg-pink-500" },
+            { id: 3, name: "Tanatswa", service: "Makeup", date: "May 20, 2026 - 03:00 PM", status: "Upcoming", imgColor: "bg-blue-500" },
+            { id: 4, name: "Kamila", service: "Manicure", date: "May 20, 2026 - 04:30 PM", status: "Upcoming", imgColor: "bg-teal-500" }
+        ];
+
+        let totalBookingsCounter = 8;
+
+        // Render Recent Bookings UI dynamically
+        function renderBookings() {
+            const container = document.getElementById('recent-bookings-list');
+            container.innerHTML = '';
+            bookingData.slice(0, 4).forEach(bk => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full ${bk.imgColor} text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                                ${bk.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-semibold text-gray-800">${bk.name}</h5>
+                                <p class="text-xs text-gray-400">${bk.service} • <span class="text-gray-500">${bk.date}</span></p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">${bk.status}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Functional Form Processing Callback
+        function handleServiceSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('svc-name').value;
+            const category = document.getElementById('svc-cat').value;
+            const price = document.getElementById('svc-price').value;
+
+            // Update local memory simulation metrics
+            totalBookingsCounter++;
+            document.getElementById('stat-total-bookings').innerText = totalBookingsCounter;
+
+            // Prepend custom entry item into bookings list tracking object
+            bookingData.unshift({
+                id: Date.now(),
+                name: "New Client Request",
+                service: `${category} (₹₹{price})`,
+                date: "Just now",
+                status: "Upcoming",
+                imgColor: "bg-rose-500"
+            });
+
+            renderBookings();
+            alert(`Success! "${name}" service added into standard operations records catalogue.`);
+            document.getElementById('addServiceForm').reset();
+        }
+
+        // Sidebar Navigation Tab Switch Router Engine Simulation
+        function switchTab(viewName) {
+            // Reset state parameters globally
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('active-nav'));
+
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            if (activeBtn) activeBtn.classList.add('active-nav');
+
+            const pageTitle = document.getElementById('page-title');
+
+            if (viewName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+                pageTitle.innerText = "Dashboard Overview";
+            } else {
+                const genericView = document.getElementById('view-generic');
+                genericView.classList.remove('hidden');
+                
+                // Capitalize dynamic names cleanly
+                const stylizedTitle = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+                pageTitle.innerText = `Manage ${stylizedTitle}`;
+                document.getElementById('generic-title').innerText = `${stylizedTitle} Engine Interface`;
+                
+                // Dynamic styling icon swapping rules
+                const iconMap = { services: 'fa-scissors', staff: 'fa-user-tie', bookings: 'fa-calendar-check', customers: 'fa-users', reviews: 'fa-star', reports: 'fa-chart-line', settings: 'fa-gear' };
+                document.getElementById('generic-icon').className = `fa-solid ${iconMap[viewName] || 'fa-folder'}`;
+            }
+        }
+
+        // Analytics Graphing Canvas Chart Modules Initializers
+        window.onload = function() {
+            renderBookings();
+
+            // 1. Line Overview Graph Initialization
+            const ctxLine = document.getElementById('bookingsOverviewChart').getContext('2d');
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['May 14', 'May 15', 'May 16', 'May 17', 'May 18', 'May 19', 'May 20'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [25, 20, 36, 30, 28, 42, 38],
+                        borderColor: '#ec4899',
+                        backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ec4899'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                    }
+                }
+            });
+
+            // 2. Pie Distribution Graph Initialization
+            const ctxPie = document.getElementById('servicePieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Haircut & Styling', 'Makeup', 'Facial', 'Manicure', 'Hair Coloring'],
+                    datasets: [{
+                        data: [35, 25, 20, 10, 10],
+                        backgroundColor: ['#a855f7', '#ec4899', '#3b82f6', '#14b8a6', '#f97316'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
